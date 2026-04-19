@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const bcrypt = require("bcryptjs")
 
 const userSchema = mongoose.Schema({
     email:{
@@ -19,4 +20,21 @@ const userSchema = mongoose.Schema({
         minlength: [6, "password should contain more than 6 characters" ],
         select: false // so when we fetch the user the password will not be fetched by default wwe have to tell server to fetch it too ( the password isn't show by default )
     }
+}, {
+    timestamps: true, // storing user creation and last details changing time
+})
+
+// hashing the password on change ( even after creation too )
+// .pre("save") // This tells Mongoose to run this function every time a document is about to be saved (either when creating a new user or updating an existing one).
+
+userSchema.pre("save",async function (next) {
+
+    if(!this.password.isModified){
+        return next()
+    }
+
+    const hash = bcrypt.hash(this.password, 10)
+    this.password = hash
+    return next()
+    
 })

@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/PiyushMishraX/bank-transaction-system#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "mongoose": "^9.4.1"
