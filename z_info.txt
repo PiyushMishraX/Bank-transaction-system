@@ -1,0 +1,3 @@
+I am using require because most of the legacy company uses require , switch to import export when needed 
+
+the bigger the jwt secret key the more computation power it takes so we balnce it for computation power and security

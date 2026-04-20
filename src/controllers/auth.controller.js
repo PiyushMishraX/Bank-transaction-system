@@ -1,4 +1,5 @@
 const userModel = require("../models/user.model")
+const jwt = require
 
 /** 
 * - user register controller
@@ -24,6 +25,9 @@ async function userRegisterController(req,res) {
     const user = await userModel.create({
         email, password, name
     })
+
+    // payload , jwtSecret and expary time ( 3 days )
+    const token = jwt.sign({ userId: user._id}, process.env.JWT_SECRET, { expiresIn:"3d"}) 
 
     
 }
