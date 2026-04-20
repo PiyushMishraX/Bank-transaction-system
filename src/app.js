@@ -3,6 +3,8 @@ const authRouter = require("./routes/auth.routes")
 
 const app = express()
 
+app.use(express.json()) // app can read data under req.body
+
 
 app.use("/api/auth", authRouter)
 
