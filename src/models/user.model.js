@@ -37,7 +37,7 @@ userSchema.pre("save",async function (next) {
     const hash = bcrypt.hash(this.password, 10)
     this.password = hash
 
-    // return next() // use nest only when not using async and await
+    // return next() // use nest only when not using async and await // no async keyword in function
 
     return
     
