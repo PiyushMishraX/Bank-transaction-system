@@ -6,7 +6,7 @@ const userModel = require("../models/user.model")
 */
 
 
-function userRegisterController(req,res) {
+async function userRegisterController(req,res) {
 
     const {email, password , name} = req.userModel
 
@@ -21,8 +21,10 @@ function userRegisterController(req,res) {
         })
     }
 
+    const user = await userModel.create({
+        email, password, name
+    })
 
-    
     
 }
 
