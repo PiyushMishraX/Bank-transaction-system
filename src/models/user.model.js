@@ -30,12 +30,16 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save",async function (next) {
 
     if(!this.password.isModified){
-        return next()
+        // return next()
+        return
     }
 
     const hash = bcrypt.hash(this.password, 10)
     this.password = hash
-    return next()
+
+    // return next() // use nest only when not using async and await
+
+    return
     
 })
 

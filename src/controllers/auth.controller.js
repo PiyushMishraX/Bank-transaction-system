@@ -1,5 +1,5 @@
 const userModel = require("../models/user.model")
-const jwt = require
+const jwt = require("jsonwebtoken")
 
 // can see this info if hover ove the router
 /** 
@@ -10,9 +10,10 @@ const jwt = require
 
 async function userRegisterController(req,res) {
 
-    const {email, password , name} = req.userModel
+    // const { email, password , name} = req.userModel
+    const { email, password , name} = req.body
 
-    const isExist = await userModel.findOne({
+    const isExists = await userModel.findOne({
         email: email
     })
 
