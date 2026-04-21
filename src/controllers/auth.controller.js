@@ -25,6 +25,7 @@ async function userRegisterController(req,res) {
         })
     }
 
+
     const user = await userModel.create({
         email, password, name
     })
@@ -46,11 +47,16 @@ async function userRegisterController(req,res) {
     
 }
 
+/** 
+* - user login controller
+* - POST /api/auth/login
+*/
+
 async function userLoginController(req,res) {
 
     const { email, password } = req.body;
 
-    const user = await userModel.findOne({email})
+    const user = await userModel.findOne({email}).select("+password") // password value do not fetch at default
 
     if(!user) {
         return res.status(401).json({
@@ -59,6 +65,9 @@ async function userLoginController(req,res) {
     }
 
     const isValidPassword = await  user.comparePassword(password)
+
+    console.log(isValidPassword);
+    
 
 
     if(!isValidPassword) {
@@ -69,14 +78,16 @@ async function userLoginController(req,res) {
 
     const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn: "3d"})
 
-    res.cookie(token)
+    res.cookie("token",token)
 
     res.status(200).json({
         _id: user._id,
         email: email,
         name: user.name,        
-    }),
+    },
     token
+)
+    
     
 }
 

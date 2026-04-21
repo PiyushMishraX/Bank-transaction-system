@@ -29,24 +29,30 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre("save",async function (next) {
 
-    if(!this.password.isModified){
+    // if(!this.password.isModified){
+    if(!this.isModified("password")){
         // return next()
-        return
+        return 
     }
 
-    const hash = bcrypt.hash(this.password, 10)
+    const hash = await bcrypt.hash(this.password, 10)
     this.password = hash
 
-    // return next() // use nest only when not using async and await // no async keyword in function
+    // return next() // use nest only when not using async and await // no async keyword in functiona
+    // delete and refresh server at inital faces for comparison etc errors
 
-    return
+    return 
     
 })
 
 
-userSchema.method.comparePassword = async function (password) {
+userSchema.methods.comparePassword = async function (password) {
 
-    return await bcrypt.compare(password, this.password) // bcrypt.compare returns true or false
+    console.log(password, this.password);
+
+ 
+
+    return await bcrypt.compare(password,this.password) // bcrypt.compare returns true or false
     
 }
 
