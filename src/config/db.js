@@ -16,4 +16,14 @@ function connectToDB(){
     })
 }
 
-module.exports = connectToDB;
+async function sendRegistrationEmail(userEmail, name){
+    const subject = 'Welcome to Backend Ledger!';
+    const text = `Hello ${name},\n\nThank you for registering at Backend Ledger. We're excited to have you on board!,\n\nBest regards,\nThe Backend Ledger team`;
+    const html = `<p>Hello ${name},</p><p>Thank you for registering at Backend Ledger. We're excited to have you on board!</p><p>Best regards,<br>The Backend Ledger team</p>`;
+
+    await sendEmail(userEmail, subject, text , html);
+}
+
+module.exports = {
+    sendRegistrationEmail
+};

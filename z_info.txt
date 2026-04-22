@@ -9,3 +9,7 @@ npm i cookie-parser , for saving and editng cookies in
 app.js -> create server , config server->middleare etc
 
 nodemailer --> google api in cloud --> gmail api
+
+
+to see how to use nodemailer go to the documentation or 
+github.com -> ankurdotio -> Difference-Backend-video
