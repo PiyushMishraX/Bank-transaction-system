@@ -81,12 +81,12 @@ async function userLoginController(req,res) {
     res.cookie("token",token)
 
     res.status(200).json({
-        _id: user._id,
-        email: email,
-        name: user.name,        
-    },
-    token
-)
+            _id: user._id,
+            email: email,
+            name: user.name,        
+        },
+        token
+    )
     
     
 }
