@@ -1,5 +1,6 @@
 const userModel = require("../models/user.model")
 const jwt = require("jsonwebtoken")
+const emailService = require("../services/email.service")
 
 // can see this info if hover ove the router ( NOT FUNCTIONALITY BUT IS JS DOC COMMENT ) ----->>>>
 
@@ -44,6 +45,9 @@ async function userRegisterController(req,res) {
         token
     })
 
+    // create after sending response so await can take time needed
+
+    await emailService.sendRegistrationEmail(user.email, user.name)
     
 }
 
