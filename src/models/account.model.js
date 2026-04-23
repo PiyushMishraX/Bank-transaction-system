@@ -6,7 +6,8 @@ const accountSchema = new mongoose.Schema({
     user:{
         type: mongoose.Schema.Types.ObjectId, // here we enter the objectid of the usermodel
         ref: "user", // name of usermodel,
-        required: [true, "Account must be associated with a user"]
+        required: [true, "Account must be associated with a user"],
+        index: true // (optimise) when we search for a users account the can be easily and efficiently searched with this feature ( B+ tree data structure is used in mongodb for this )
 
     },
     status: { // account uis working , froxen or closed
@@ -20,6 +21,21 @@ const accountSchema = new mongoose.Schema({
         required: [true, "Currency is required for creating an account"],
         default: "INR"
     },
-    
+    //  we do not hardcode(directly store) balance in the databse we use cache , ledger etc
 
+}, {
+    timestamps:true
 })
+
+
+// (optimise) another index ( compount index ) // we can find using status too // compund index , searching based on both -> id and status
+accountSchema.index({user:1, status:1})
+
+
+
+
+
+
+const accountModel = mongoose.model("account", accountSchema)
+
+module.exports = accountModel;
