@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken")
 async function authMiddleware(req, res, next) {
 
     const token = req.cookies.token || req.headers.authorization?.split(" ")[ 1 ]
+    // The Authorization header is a standard HTTP header used to carry credentials (like a Bearer Token) to authenticate a client with a server
 
     if(!token){
         return res.status(401).json({

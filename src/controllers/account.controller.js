@@ -23,6 +23,6 @@ async function createAccountController(req,res) {
 
 }
 
-model.exports = {
+module.exports = {
     createAccountController
 }
