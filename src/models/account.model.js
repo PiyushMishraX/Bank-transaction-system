@@ -11,11 +11,14 @@ const accountSchema = new mongoose.Schema({
 
     },
     status: { // account uis working , froxen or closed
+        type: String, // message needs to be string 
         enum: {
-            value: [ "ACTIVE", "FROZEN", "CLOSED"],
+            values: [ "ACTIVE", "FROZEN", "CLOSED"],
             message: "Status can be either ACTIVE, FROZEN OR CLOSED",
-            default: "ACTIVE" // account by deafult active at time of cration
-        }
+        },
+        // An enum is a validation constraint that restricts a field's value to a specific, predefined set of allowed options.
+
+        default: "ACTIVE" // account by deafult active at time of cration
     },
     currency: {
         type: String,
