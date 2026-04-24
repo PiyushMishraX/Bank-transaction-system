@@ -16,9 +16,9 @@ async function authMiddleware(req, res, next) {
 
             const user = await userModel.findById(decodedd.userId)
 
-            req.user = user
+            req.user = user // request now have user which we can use in the controller after the next()
 
-            return next()
+            return next() 
             
         } catch (err) {
 
@@ -29,4 +29,8 @@ async function authMiddleware(req, res, next) {
         }
     }
     
+}
+
+module.exports = {
+    authMiddleware
 }
