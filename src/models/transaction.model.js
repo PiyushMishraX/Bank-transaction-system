@@ -29,7 +29,7 @@ const transactionSchema = new mongoose.Schema({
         required: [ true, "Amount is required for ccrating a transaction" ],
         min: [ 0, "Transaction amount cannot be negative" ]
     },
-    idempotencyKey: {
+    idempotencyKey: { // genrated on client side not backend 
         type: String,
         required: [true , "Idempotency Key is required for creating a transaction "],
         index: trure,
@@ -41,3 +41,7 @@ const transactionSchema = new mongoose.Schema({
 
 
 
+const transactionModel = mongoose.model("transaction", transactionSchema)
+
+
+module.exports = transactionModel

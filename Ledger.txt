@@ -49,3 +49,8 @@ in backend we also make sure if money doesn't deposit to B , due to some error w
 Banks use the ledger system to maintain proper balance .
 The total/final balance isn't harcoded but calculated by adding all credited ammount and reducing the adding of all debits.
 Every time we use ledger system for total balance.
+
+
+
+idempotencyKey -->
+one transaction one key ( it do not repeats ) , genrated on client side , generated uniquely for each transaction
