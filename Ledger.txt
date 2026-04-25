@@ -6,7 +6,7 @@ transaction{
     Form-A
     To-B
     ammount - 100
-    itemPotencyKey - xyz ( unique one time generated key - string)
+    idempotencyKey - xyz ( unique one time generated key - string)
     status - Pending
 }
 
@@ -29,7 +29,7 @@ transaction{
     Form-A
     To-B
     ammount - 100
-    itemPotencyKey - xyz ( unique one time generated key - string)
+    idempotencyKey - xyz ( unique one time generated key - string)
     status - Complete
 }
 
@@ -40,7 +40,7 @@ ammount deduct from A
 ammount input(deposit) in B ledger
 set status to complete
 
-itemPotencyKey -->
+idempotencyKey -->
 when transaction is pending afterr initalization( such as internet issues etc ) the app?serve sends multiple request to check if transaction in done or transaction initalized or sended or not.
 To make sure the same transaction isn't done multiple times due to this requests itemPotencyKey is used
 
