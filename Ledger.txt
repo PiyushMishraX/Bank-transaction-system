@@ -1,0 +1,42 @@
+how banks use ledger
+
+first transaction is created ( with )
+
+transaction{
+    Form-A
+    To-B
+    ammount - 100
+    itemPotencyKey - xyz ( unique one time generated key - string)
+    status - Pending
+}
+
+ledger is like a register system , which maintain the history of transaction
+
+For each transaction , two ledger entries are done -
+Ledger-a{
+    Account - A
+    ammount - 100
+    Type - Debit // money taken from her
+}
+Ledger-B{
+    Account - B
+    ammount - 100
+    Type - Credit // money recieved
+}
+
+then set status to -
+transaction{
+    Form-A
+    To-B
+    ammount - 100
+    itemPotencyKey - xyz ( unique one time generated key - string)
+    status - Complete
+}
+
+
+4 steps -
+Create Transaction , status Pending
+ammount deduct from A
+ammount input(deposit) in B ledger
+set status to complete
+
