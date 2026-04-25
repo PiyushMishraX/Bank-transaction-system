@@ -42,6 +42,10 @@ set status to complete
 
 itemPotencyKey -->
 when transaction is pending afterr initalization( such as internet issues etc ) the app?serve sends multiple request to check if transaction in done or transaction initalized or sended or not.
-To make sure the same transaction isn't done multiple times due to these requests itemPotencyKey is used
+To make sure the same transaction isn't done multiple times due to this requests itemPotencyKey is used
 
 in backend we also make sure if money doesn't deposit to B , due to some error we return the money to A
+
+Banks use the ledger system to maintain proper balance .
+The total/final balance isn't harcoded but calculated by adding all credited ammount and reducing the adding of all debits.
+Every time we use ledger system for total balance.
