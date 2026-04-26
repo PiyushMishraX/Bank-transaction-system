@@ -1,5 +1,7 @@
 const mongoose = require("mongoose")
 
+/** <<<---- LEDGER SCHEMA ---->>> */
+
 const ledgerSchema = new mongoose.Schema({
     account: {
         type: mongoose.Schema.Types.ObjectId,
@@ -32,6 +34,8 @@ const ledgerSchema = new mongoose.Schema({
 })
 
 
+//     <<<----- MODIFICATION / DELETION PROVENTION ----->>>
+
 // A ledger entry is single source of truth for as 
 // SO we let an entry be created but do not allow it to be changed at any time in future
 //  for prevension we create some hooks
@@ -41,9 +45,21 @@ function preventLedgerModification() {
     throw new Error("Ledger entries are immutable and cannot be modified");
 }
 
+// PREVENTIONS ---->>>
 // Prevent ledger modification ( stopping and gving error for these modification(updation/deletion) operations)
 ledgerSchema.pre('findOneAndUpdate',preventLedgerModification);
 ledgerSchema.pre('updateOne',preventLedgerModification);
 ledgerSchema.pre('deleteOne',preventLedgerModification);
 ledgerSchema.pre('remove',preventLedgerModification);
 ledgerSchema.pre('deleteMay',preventLedgerModification);
+ledgerSchema.pre('updateMany',preventLedgerModification);
+ledgerSchema.pre('findOneAndDelete',preventLedgerModification);
+ledgerSchema.pre('findOneAndReplace',preventLedgerModification);
+
+
+
+
+const ledgerModel = mongoose.model("ledger", ledgerSchema);
+
+
+module.exports = ledgerModel;
