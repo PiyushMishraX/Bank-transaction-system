@@ -30,3 +30,14 @@ const ledgerSchema = new mongoose.Schema({
         immutable: true
     }
 })
+
+
+// A ledger entry is single source of truth for as 
+// SO we let an entry be created but do not allow it to be changed at any time in future
+//  for prevension we create some hooks
+
+// error if someone tries to modify our ledger entries
+function preventLedgerModification() {
+    throw new Error("Ledger entries are immutable and cannot be modified");
+}
+
