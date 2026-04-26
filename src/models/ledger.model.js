@@ -41,3 +41,9 @@ function preventLedgerModification() {
     throw new Error("Ledger entries are immutable and cannot be modified");
 }
 
+// Prevent ledger modification ( stopping and gving error for these modification(updation/deletion) operations)
+ledgerSchema.pre('findOneAndUpdate',preventLedgerModification);
+ledgerSchema.pre('updateOne',preventLedgerModification);
+ledgerSchema.pre('deleteOne',preventLedgerModification);
+ledgerSchema.pre('remove',preventLedgerModification);
+ledgerSchema.pre('deleteMay',preventLedgerModification);
