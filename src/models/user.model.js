@@ -19,6 +19,12 @@ const userSchema = new mongoose.Schema({
         required: [true, "Password is required for creating an account"],
         minlength: [6, "password should contain more than 6 characters" ],
         select: false // so when we fetch the user the password will not be fetched by default wwe have to tell server to fetch it too ( the password isn't show by default )
+    },
+    systemUser: {
+        type: Boolean,
+        default: false,
+        immutable: true,
+        select: False
     }
 }, {
     timestamps: true, // storing user creation and last details changing time

@@ -70,5 +70,7 @@ async function sendTransactionFailureEmail(userEmail, name , amount , toAccount)
 }
 
 module.exports = {
-    sendRegistrationEmail
+    sendRegistrationEmail,
+    sendTransactionEmail,
+    sendTransactionFailureEmail
 };

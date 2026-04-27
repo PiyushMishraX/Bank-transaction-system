@@ -1,5 +1,6 @@
 const transactionModel = require("../models/transaction.model")
 const ledgerModel = require("../models/ledger.model")
+const emailService = require("../services/email.service")
 
 /**
  * - Create new transaction
@@ -16,6 +17,11 @@ const ledgerModel = require("../models/ledger.model")
      * 10. Send email notification
  */
 
+async function createTransaction(req, res){
+
+    const { fromAccount, toAccount, amount, idempotencyKey } = req.body; // validate if accounts even exists or not, the user is using his account or not ( not others users account )
+    // and creating intial funding to an acc ount from system account
+}
 
 
 
