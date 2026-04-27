@@ -20,9 +20,9 @@ async function authMiddleware(req, res, next) {
         // console.log("authmiddleware");
         
 
-        const decodedd = jwt.verify(token, process.env.JWT_SECRET)
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-        const user = await userModel.findById(decodedd.userId)
+        const user = await userModel.findById(decoded.userId)
 
         req.user = user // request now have user which we can use in the controller after the next()
 
@@ -41,6 +41,8 @@ async function authMiddleware(req, res, next) {
     
     
 }
+
+
 
 module.exports = {
     authMiddleware

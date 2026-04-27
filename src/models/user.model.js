@@ -24,8 +24,8 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
         immutable: true,
-        select: False
-    }
+        select: false
+    } // create a system user with access tool // change it to true directly in database not by code
 }, {
     timestamps: true, // storing user creation and last details changing time
 })
