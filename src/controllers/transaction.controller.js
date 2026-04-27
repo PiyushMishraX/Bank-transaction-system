@@ -7,7 +7,7 @@ const ledgerModel = require("../models/ledger.model")
      * 1. Validate request
      * 2. Validate idempotency key
      * 3. Check account status
-     * 4. Derive sender balance from ledger
+     * 4. Derive sender balance from ledger ( sufficient balnce on sneder acc)
      * 5. Create transaction (PENDING)
      * 6. Create DEBIT ledger entry
      * 7. Create CREDIT ledger entry
@@ -15,4 +15,8 @@ const ledgerModel = require("../models/ledger.model")
      * 9. Commit MongoDB session
      * 10. Send email notification
  */
+
+
+
+
 
