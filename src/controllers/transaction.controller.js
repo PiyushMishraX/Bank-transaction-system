@@ -44,11 +44,18 @@ async function createInitailFundsTransaction(req, res){
         })
     }
 
-
+    // from user account / system
     const fromUserAccount = await accountModel.findOne({
         systemUser: true,
         user: req.user._id
     })
+
+    // fallback if no sytem accounts
+    if(!fromUserAccount) {
+        return res.status(400).json({
+            message: "System user account not foundt"
+        })
+    }
 
 }
 
