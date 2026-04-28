@@ -68,6 +68,14 @@ async function createInitailFundsTransaction(req, res){
         status: "PENDING"
     }, { session })
 
+    // ledger entry debit
+    const debitLedgerEntry = await ledgerModel.create({
+        account: fromUserAccount._id,
+        amount: amount,
+        transaction: transaction._id,
+        type: "DEBIT",
+    }, { session })
+
 }
 
 
