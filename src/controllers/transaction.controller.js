@@ -44,6 +44,12 @@ async function createInitailFundsTransaction(req, res){
         })
     }
 
+
+    const fromUserAccount = await accountModel.findOne({
+        systemUser: true,
+        user: req.user._id
+    })
+
 }
 
 
