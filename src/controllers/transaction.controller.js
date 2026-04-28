@@ -23,9 +23,33 @@ async function createTransaction(req, res){
     // and creating intial funding to an acc ount from system account
 }
 
+async function createInitailFundsTransaction(req, res){
+    const {toAccount, amount, idempotencyKey} = req.body
+
+    // validations
+    if(!toAccount || !amount || !idempotencyKey) {
+        return res.status(400).json({
+            message: "toAccount, amount and idempotencyKey are required"
+        })
+    }
+
+    // if account really exists or not check
+    const toUserAccount = await accountModel.findOne({
+        _id: toAccount,
+    })
+
+    if(!toUserAccount){
+        return res.status(400).json({
+            message: "Invalid toAccount"
+        })
+    }
+
+}
+
 
 
 
 module.exports = {
-    createTransaction
+    createTransaction,
+    createInitailFundsTransaction
 }

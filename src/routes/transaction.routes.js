@@ -17,7 +17,7 @@ transactionRoutes.post("/", authMiddleware.authMiddleware, transactionController
  * - POST /api/transactions/system/initial-funds
  * - Create initial funds transacion from system user
  */
-transactionRoutes.post("/system/inital-funds", authMiddleware.authSystemUserMiddleware , transactionController.createTransaction)
+transactionRoutes.post("/system/inital-funds", authMiddleware.authSystemUserMiddleware , transactionController.createInitailFundsTransaction)
 
 
 
