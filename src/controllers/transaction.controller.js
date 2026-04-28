@@ -57,6 +57,17 @@ async function createInitailFundsTransaction(req, res){
         })
     }
 
+
+    //  transaction
+
+    const transaction = await transactionModel.create({
+        fromAccount: fromAccount._id,
+        toAccount,
+        amount,
+        idempotencyKey,
+        status: "PENDING"
+    }, { session })
+
 }
 
 
