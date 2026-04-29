@@ -83,6 +83,17 @@ async function createInitailFundsTransaction(req, res){
         type: "CREDIT"
     }, { session })
 
+    transaction.status = "COMPLETED"
+    await transaction.save({ session })
+
+    await session.commitTransaction()
+    session.endSession()
+
+    return res.status(201).json({
+        message: "Inital funds transaction completed successfully",
+        transaction: transaction
+    })
+
 }
 
 
