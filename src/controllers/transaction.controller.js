@@ -1,6 +1,9 @@
 const transactionModel = require("../models/transaction.model")
 const ledgerModel = require("../models/ledger.model")
 const emailService = require("../services/email.service")
+const accountModel = require("../models/account.model")
+const mongoose = require("mongoose")
+
 
 /**
  * - Create new transaction
@@ -23,7 +26,7 @@ async function createTransaction(req, res){
     // and creating intial funding to an acc ount from system account
 }
 
-async function createInitailFundsTransaction(req, res){
+async function createInitialFundsTransaction(req, res){
     const {toAccount, amount, idempotencyKey} = req.body
 
     // validations
@@ -53,35 +56,37 @@ async function createInitailFundsTransaction(req, res){
     // fallback if no sytem accounts
     if(!fromUserAccount) {
         return res.status(400).json({
-            message: "System user account not foundt"
+            message: "System user account not found"
         })
     }
 
+    const session = await mongoose.startSession()
+    session.startTransaction()
 
     //  transaction
 
-    const transaction = await transactionModel.create({
-        fromAccount: fromAccount._id,
+    const transaction = new transactionModel({
+        fromAccount: fromUserAccount._id,
         toAccount,
         amount,
         idempotencyKey,
         status: "PENDING"
-    }, { session })
+    })
 
     // ledger entry debit
-    const debitLedgerEntry = await ledgerModel.create({
+    const debitLedgerEntry = await ledgerModel.create([ {
         account: fromUserAccount._id,
         amount: amount,
         transaction: transaction._id,
         type: "DEBIT",
-    }, { session })
+    } ], { session })
 
-    const creditLedgerEntry = await ledgerModel.create({
+    const creditLedgerEntry = await ledgerModel.create([ {
         account: toAccount,
         amount: amount,
         transaction: transaction._id,
         type: "CREDIT"
-    }, { session })
+    } ], { session })
 
     transaction.status = "COMPLETED"
     await transaction.save({ session })
@@ -101,5 +106,5 @@ async function createInitailFundsTransaction(req, res){
 
 module.exports = {
     createTransaction,
-    createInitailFundsTransaction
+    createInitialFundsTransaction
 }

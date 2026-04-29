@@ -54,3 +54,7 @@ Every time we use ledger system for total balance.
 
 idempotencyKey -->
 one transaction one key ( it do not repeats ) , genrated on client side , generated uniquely for each transaction
+
+
+For now for testing purpose to generate idempotencyKey Use uuid generator to genrate unique id
+generate version 7 uuid

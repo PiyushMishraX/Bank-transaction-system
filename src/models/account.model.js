@@ -27,6 +27,14 @@ const accountSchema = new mongoose.Schema({
     },
     //  we do not hardcode(directly store) balance in the databse we use cache , ledger etc
 
+    // to identify account of system user
+    systemUser: {
+        type: Boolean,
+        default: false,
+        immutable: true,
+        select: false
+    }
+
 }, {
     timestamps:true
 })
