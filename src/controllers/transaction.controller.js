@@ -76,6 +76,13 @@ async function createInitailFundsTransaction(req, res){
         type: "DEBIT",
     }, { session })
 
+    const creditLedgerEntry = await ledgerModel.create({
+        account: toAccount,
+        amount: amount,
+        transaction: transaction._id,
+        type: "CREDIT"
+    }, { session })
+
 }
 
 
