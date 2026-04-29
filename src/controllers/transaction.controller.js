@@ -24,6 +24,12 @@ async function createTransaction(req, res){
 
     const { fromAccount, toAccount, amount, idempotencyKey } = req.body; // validate if accounts even exists or not, the user is using his account or not ( not others users account )
     // and creating intial funding to an acc ount from system account
+
+    if(!fromAccount || !toAccount || !amount || !idempotencyKey){
+        return res.status(400).json({
+            message: "FromAccount, toAccount, amount and idempotencyKey are required"
+        })
+    }
 }
 
 async function createInitialFundsTransaction(req, res){
