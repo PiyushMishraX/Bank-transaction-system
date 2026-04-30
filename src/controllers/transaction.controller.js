@@ -22,6 +22,10 @@ const mongoose = require("mongoose")
 
 async function createTransaction(req, res){
 
+    /**
+     * 1.Validate request
+     */
+
     const { fromAccount, toAccount, amount, idempotencyKey } = req.body; // validate if accounts even exists or not, the user is using his account or not ( not others users account )
     // and creating intial funding to an acc ount from system account
 
@@ -30,6 +34,27 @@ async function createTransaction(req, res){
             message: "FromAccount, toAccount, amount and idempotencyKey are required"
         })
     }
+
+    const fromUserAccount = await accountModel.findOne({
+        _id: fromAccount,
+    })
+
+    const toUserAccount = await accountModel.findOne({
+        _id: toAccount,
+
+    })
+
+    if(!fromUserAccount || !toUserAccount) {
+        return res.status(400).json({
+            message: "Invalid fromAccount or toAccount"
+        })
+    }
+
+    /**
+     * 2. Validate idempotencyKey
+     */
+
+
 }
 
 async function createInitialFundsTransaction(req, res){
