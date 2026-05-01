@@ -63,6 +63,15 @@ accountSchema.methods.getBalance = async function () {
                             0
                         ]
                     }
+                },
+                totalCredit: {
+                    $sum: {
+                        $cond:[
+                            {$eq: ["$type", "CREDIT"] },
+                            "amount", // type debit than add amount else zero
+                            0
+                        ]
+                    }
                 }
             }
         }
