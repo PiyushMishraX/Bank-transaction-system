@@ -1,6 +1,7 @@
 // one person can have multiple transaction accounts so creating seperate account model in better
 
 const mongoose = require("mongoose")
+const ledgerModel = require("./ledger.model")
 
 const accountSchema = new mongoose.Schema({
     user:{
@@ -42,6 +43,32 @@ const accountSchema = new mongoose.Schema({
 
 // (optimise) another index ( compount index ) // we can find using status too // compund index , searching based on both -> id and status
 accountSchema.index({user:1, status:1})
+
+// this method can be directly called fromt the file which uses the accountSchema 
+accountSchema.methods.getBalance = async function () {
+
+    // aggregation pipelines helps to run custom queries on db
+    // the pipe line accepts and array with steps written in it
+    const balanceData = await ledgerModel.aggregate([
+        { $match: { account: this._id}}, // find all ledger entries
+
+        {
+            $group: {
+                _id: null,
+                totalDebit: {
+                    $sum: {
+                        $cond:[
+                            {$eq: ["$type", "DEBIT"] },
+                            "amount", // type debit than add amount else zero
+                            0
+                        ]
+                    }
+                }
+            }
+        }
+    ])
+    
+}
 
 
 const accountModel = mongoose.model("account", accountSchema)
