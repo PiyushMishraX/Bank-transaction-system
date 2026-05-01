@@ -74,8 +74,21 @@ accountSchema.methods.getBalance = async function () {
                     }
                 }
             }
+        },
+        {
+            $project: {
+                _id: 0,
+                balance: { $subtract: [ "$totalCredit", "$totalDebit"]}
+            }
         }
     ])
+
+    // if account is no with no ledger entries the pipeline will return an empty array , we have to check for that
+    if(balanceData.length === 0){
+        return 0
+    }
+
+    return balanceData[ 0 ].balance
     
 }
 
