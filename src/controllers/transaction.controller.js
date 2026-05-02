@@ -139,7 +139,15 @@ async function createTransaction(req, res){
     
     
 
-   
+    /**
+     * 7. Create CREDIT ledger entry
+     */
+    const creditLedgerEntry = await ledgerModel.create({
+        account: toAccount,
+        amount: amount,
+        transaction: transaction._id,
+        type: "CREDIT"
+    }, { session })
 
         
 
