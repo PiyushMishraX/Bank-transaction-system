@@ -108,6 +108,24 @@ async function createTransaction(req, res){
         })
     }
 
+    /**
+     * 5. Create transaction (PENDING)
+     */
+
+    //creating session // so the step 5-8 will only save when all completed else any one won't be completed and reverted back
+    const session = await mongoose.startSession()
+    session.startTransaction()
+
+    // create({}, {session})
+    const transaction = await transactionModel.create({
+        fromAccount,
+        toAccount,
+        idempotencyKey,
+        status: "PENDING"
+    }, { session })
+
+  
+        
 
 
 }
