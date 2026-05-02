@@ -164,7 +164,18 @@ async function createTransaction(req, res){
     session.endSession
 
 
-    
+    /**
+     * * 10. Send email notification
+     */
+
+    await emailService.sendTransactionEmail(req.user.email, req.user.name, amount,  toAccount)
+    // access because of authmiddleware
+
+    return res.status(201).json({
+        message: "Transaction completed successfully",
+        transaction: transaction
+    })
+
         
 
 
