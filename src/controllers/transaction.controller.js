@@ -95,6 +95,21 @@ async function createTransaction(req, res){
         })
     }
 
+    // ( sufficient balnce on sneder acc)
+    /**
+     * 4. Derive sender balance from ledger 
+     */
+    const balance = await fromUserAccount.getBalance() // fromUserAccount is derived from accountModel so we can use this function ( if not then  cann't) , we can use it for toUsers account too
+
+    if( balance < amount) {
+        return res.status(400).json({
+            // message: "Insufficient balance in fromAccount"
+            message: `Insufficient balance. Current balance is ${balance}. Requested amount is ${amount} `
+        })
+    }
+
+
+
 }
 
 async function createInitialFundsTransaction(req, res){
