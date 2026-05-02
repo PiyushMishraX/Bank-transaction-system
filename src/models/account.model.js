@@ -51,37 +51,37 @@ accountSchema.methods.getBalance = async function () {
     // the pipe line accepts and array with steps written in it
     const balanceData = await ledgerModel.aggregate([
         { $match: { account: this._id}}, // find all ledger entries
-
         {
-            $group: {
-                _id: null,
-                totalDebit: {
-                    $sum: {
-                        $cond:[
-                            {$eq: ["$type", "DEBIT"] },
-                            "amount", // type debit than add amount else zero
-                            0
-                        ]
-                    }
-                },
-                totalCredit: {
-                    $sum: {
-                        $cond:[
-                            {$eq: ["$type", "CREDIT"] },
-                            "amount", // type debit than add amount else zero
-                            0
-                        ]
+                $group: {
+                    _id: null,
+                    totalDebit: {
+                        $sum: {
+                            $cond: [
+                                { $eq: [ "$type", "DEBIT" ] },
+                                "$amount", // type debit than add amount else zero
+                                0
+                            ]
+                        }
+                    },
+                    totalCredit: {
+                        $sum: {
+                            $cond: [
+                                { $eq: [ "$type", "CREDIT" ] },
+                                "$amount", // type debit than add amount else zero
+                                0
+                            ]
+                        }
                     }
                 }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    balance: { $subtract: [ "$totalCredit", "$totalDebit" ] }
+                }
             }
-        },
-        {
-            $project: {
-                _id: 0,
-                balance: { $subtract: [ "$totalCredit", "$totalDebit"]}
-            }
-        }
-    ])
+        ])
+
 
     // if account is no with no ledger entries the pipeline will return an empty array , we have to check for that
     if(balanceData.length === 0){
