@@ -149,6 +149,22 @@ async function createTransaction(req, res){
         type: "CREDIT"
     }, { session })
 
+    /**
+     * 8. Mark transaction COMPLETED
+     */ 
+    transaction.status = "COMPLETED"
+    await transaction.save({ session })
+
+
+    /**
+     * * 9. Commit MongoDB session
+     */
+
+    await session.commitTransaction()
+    session.endSession
+
+
+    
         
 
 
