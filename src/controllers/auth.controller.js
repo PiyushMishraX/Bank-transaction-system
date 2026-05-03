@@ -1,6 +1,7 @@
 const userModel = require("../models/user.model")
 const jwt = require("jsonwebtoken")
 const emailService = require("../services/email.service")
+const tokenBlackListModel = require("../models/balcklist.model")
 
 // can see this info if hover ove the router ( NOT FUNCTIONALITY BUT IS JS DOC COMMENT ) ----->>>>
 
@@ -8,7 +9,6 @@ const emailService = require("../services/email.service")
 * - user register controller
 * - POST /api/auth/register
 */
-
 
 async function userRegisterController(req,res) {
 
@@ -51,8 +51,9 @@ async function userRegisterController(req,res) {
     
 }
 
+
 /** 
-* - user login controller
+* - user Login controller
 * - POST /api/auth/login
 */
 
@@ -92,6 +93,29 @@ async function userLoginController(req,res) {
         token
     )
     
+    
+}
+
+
+/**
+ * - user Logout controller
+ * - POST /api/auth/logout
+ */
+
+async function userLogoutController(req, res) {
+
+    const token = req.cookies.token || req.header.authorization?.split(" ")[ 1 ]
+
+    if(!token){
+        // return res.status(400).json({}) // can send 400 bcz user wants to logout but do not have token or can send 200 ->
+        return res.status(200).json({
+            message: "User logged out successfully"
+        })
+    }
+
+    res.cookie("token", "") // clear token
+
+   
     
 }
 

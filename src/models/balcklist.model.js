@@ -18,3 +18,7 @@ tokenBlacklistSchema.index({ createdAt:1},{
 const tokenBlackListModel = mongoose.model("tokenBlacklist", tokenBlacklistSchema);
 
 module.exports = tokenBlackListModel;
+
+
+// the process is easy because everytime a token is created is is unique bcz of jwt.sign method which adds issuedAt time by default , so we do not have to check token for uniqueness ,
+// we check uniquness only for when one request is being used multiple times
