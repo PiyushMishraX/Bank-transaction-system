@@ -16,7 +16,7 @@ An advanced, production-level backend for a banking application that simulates h
 1. Clone or download the repository.
 2. Run `npm install` to install dependencies.
 3. Configure your `.env` file with necessary credentials (e.g., MongoDB URI, JWT Secret, Google API keys).
-4. Run `npm start` (or `node app.js`) to launch the server.
+4. Run `npm start` (or `node server.js`) to launch the server.
 5. Send a `GET` request to `/` to verify the "Ledger Service is up and running".
 
 ### 🔗 Live Demo
