@@ -112,98 +112,98 @@ async function createTransaction(req, res){
 
     try {
     
-    /**
-     * 5. Create transaction (PENDING)
-     */
+        /**
+         * 5. Create transaction (PENDING)
+         */
 
-    //creating session // so the step 5-8 will only save when all completed else any one won't be completed and reverted back
-    const session = await mongoose.startSession()
-    session.startTransaction()
+        //creating session // so the step 5-8 will only save when all completed else any one won't be completed and reverted back
+        const session = await mongoose.startSession()
+        session.startTransaction()
 
-    // create({}, {session})
-    // const transaction = new transactionModel({
-    //     fromAccount,
-    //     toAccount,
-    //     amount,
-    //     idempotencyKey,
-    //     status: "PENDING"
-    // })
-    // if the same transaction runs twice in small interval and the transaction isn't sasved in db we get two transactions for same idempotecy key so we store it in db and update the status after completion
-    transaction = (await transactionModel.create([ {
-        fromAccount,
-        toAccount,
-        amount,
-        idempotencyKey,
-        status: "PENDING"
-    } ] ,{session}))[ 0 ] // at zero position of transaction array
+        // create({}, {session})
+        // const transaction = new transactionModel({
+        //     fromAccount,
+        //     toAccount,
+        //     amount,
+        //     idempotencyKey,
+        //     status: "PENDING"
+        // })
+        // if the same transaction runs twice in small interval and the transaction isn't sasved in db we get two transactions for same idempotecy key so we store it in db and update the status after completion
+        transaction = (await transactionModel.create([ {
+            fromAccount,
+            toAccount,
+            amount,
+            idempotencyKey,
+            status: "PENDING"
+        } ] ,{session}))[ 0 ] // at zero position of transaction array
 
-    /**
-     *  6. Create DEBIT ledger entry
-     */
+        /**
+         *  6. Create DEBIT ledger entry
+         */
 
-    // money going -> debit
-    // money coming -> credit
-    const debitLedgerEntry = await ledgerModel.create( [{
-        account: fromAccount,
-        amount: amount,
-        transaction: transaction._id,
-        type: "DEBIT"
-    }]  , { session })
+        // money going -> debit
+        // money coming -> credit
+        const debitLedgerEntry = await ledgerModel.create( [{
+            account: fromAccount,
+            amount: amount,
+            transaction: transaction._id,
+            type: "DEBIT"
+        }]  , { session })
 
-    await (() => {
-        // return new Promise((resolve) => setTimeout(resolve, 100*1000));
-        return new Promise((resolve) => setTimeout(resolve, 10*1000)); // 10 sec for testing convinience
-        // wait for 100 seconds to simulate that money deducted from account and is being sent to toAccount in meanTIme
-    })()
+        await (() => {
+            // return new Promise((resolve) => setTimeout(resolve, 100*1000));
+            return new Promise((resolve) => setTimeout(resolve, 10*1000)); // 10 sec for testing convinience
+            // wait for 100 seconds to simulate that money deducted from account and is being sent to toAccount in meanTIme
+        })()
+        
+
+        /**
+         * 7. Create CREDIT ledger entry
+         */
+        const creditLedgerEntry = await ledgerModel.create( [{
+            account: toAccount,
+            amount: amount,
+            transaction: transaction._id,
+            type: "CREDIT"
+        }]  , { session })
+
+        /**
+         * 8. Mark transaction COMPLETED
+         */ 
+        // transaction.status = "COMPLETED"
+        // await transaction.save({ session })
     
+        // using update method because transaction variable in constant so transaction.status can't be changed this way in db
+        await transactionModel.findOneAndUpdate(
+            { _id: transaction._id },
+            { status: "COMPLETED" },
+            { session }
+        )
+        transaction.status ="COMPLETED"// transaction is being used in response so we have to mark it completed so the response also have complete marked in it  
 
-    /**
-     * 7. Create CREDIT ledger entry
-     */
-    const creditLedgerEntry = await ledgerModel.create( [{
-        account: toAccount,
-        amount: amount,
-        transaction: transaction._id,
-        type: "CREDIT"
-    }]  , { session })
+        /**
+         * * 9. Commit MongoDB session
+         */
 
-    /**
-     * 8. Mark transaction COMPLETED
-     */ 
-    // transaction.status = "COMPLETED"
-    // await transaction.save({ session })
-   
-    // using update method because transaction variable in constant so transaction.status can't be changed this way in db
-    await transactionModel.findOneAndUpdate(
-        { _id: transaction._id },
-        { status: "COMPLETED" },
-        { session }
-    )
-    transaction.status ="COMPLETED"// transaction is being used in response so we have to mark it completed so the response also have complete marked in it  
-
-    /**
-     * * 9. Commit MongoDB session
-     */
-
-    await session.commitTransaction()
-    session.endSession()
+        await session.commitTransaction()
+        session.endSession()
 
 
-    /**
-     * * 10. Send email notification
-     */
+        /**
+         * * 10. Send email notification
+         */
 
-    await emailService.sendTransactionEmail(req.user.email, req.user.name, amount,  toAccount)
-    // access because of authmiddleware
+        await emailService.sendTransactionEmail(req.user.email, req.user.name, amount,  toAccount)
+        // access because of authmiddleware
 
 
-} catch(error) {
-    // for when we try to request the same transaction and other error cases 
+    } catch(error) {
+        // for when we try to request the same transaction and other error cases 
 
-    return res.status(400).json({
-        message: "Transaction is pending due to some issue, please retry after sometime",
-    })
-}
+        return res.status(400).json({
+            message: "Transaction is pending due to some issue, please retry after sometime",
+        })
+    }
 
 // shift return block here so the catch error only shows when conflicts and returns else this runs after completion
  return res.status(201).json({
