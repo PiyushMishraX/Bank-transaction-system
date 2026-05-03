@@ -145,7 +145,11 @@ async function createTransaction(req, res){
         transaction: transaction._id,
         type: "DEBIT"
     }]  , { session })
-    
+
+    await (() => {
+        return new Promise((resolve) => setTimeout(resolve, 100*1000));
+        // wait for 100 seconds to simulate that money deducted from account and is being sent to toAccount in meanTIme
+    })()
     
 
     /**
