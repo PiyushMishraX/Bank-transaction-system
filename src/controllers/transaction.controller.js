@@ -108,6 +108,8 @@ async function createTransaction(req, res){
         })
     }
 
+    try {
+    
     /**
      * 5. Create transaction (PENDING)
      */
@@ -147,7 +149,8 @@ async function createTransaction(req, res){
     }]  , { session })
 
     await (() => {
-        return new Promise((resolve) => setTimeout(resolve, 100*1000));
+        // return new Promise((resolve) => setTimeout(resolve, 100*1000));
+        return new Promise((resolve) => setTimeout(resolve, 10*1000)); // 10 sec for testing convinience
         // wait for 100 seconds to simulate that money deducted from account and is being sent to toAccount in meanTIme
     })()
     
@@ -195,6 +198,14 @@ async function createTransaction(req, res){
         message: "Transaction completed successfully",
         transaction: transaction
     })
+
+} catch(error) {
+    // for when we try to request the same transaction and other error cases 
+    
+    return res.status(400).json({
+        message: "Transaction is pending due to some issue, please retry after sometime",
+    })
+}
 
         
 }
