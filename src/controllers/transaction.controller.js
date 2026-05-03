@@ -108,6 +108,8 @@ async function createTransaction(req, res){
         })
     }
 
+    let transaction;
+
     try {
     
     /**
@@ -127,7 +129,7 @@ async function createTransaction(req, res){
     //     status: "PENDING"
     // })
     // if the same transaction runs twice in small interval and the transaction isn't sasved in db we get two transactions for same idempotecy key so we store it in db and update the status after completion
-    const transaction = (await transactionModel.create([ {
+    transaction = (await transactionModel.create([ {
         fromAccount,
         toAccount,
         amount,
@@ -194,18 +196,20 @@ async function createTransaction(req, res){
     await emailService.sendTransactionEmail(req.user.email, req.user.name, amount,  toAccount)
     // access because of authmiddleware
 
-    return res.status(201).json({
-        message: "Transaction completed successfully",
-        transaction: transaction
-    })
 
 } catch(error) {
     // for when we try to request the same transaction and other error cases 
-    
+
     return res.status(400).json({
         message: "Transaction is pending due to some issue, please retry after sometime",
     })
 }
+
+// shift return block here so the catch error only shows when conflicts and returns else this runs after completion
+ return res.status(201).json({
+        message: "Transaction completed successfully",
+        transaction: transaction
+    })
 
         
 }

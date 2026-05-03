@@ -13,3 +13,7 @@ nodemailer --> google api in cloud --> gmail api
 
 to see how to use nodemailer go to the documentation or 
 github.com -> ankurdotio -> Difference-Backend-video
+
+
+
+in logout feature we do not just clear cookies but also blacklist the token so anyone else can not login even if he have the token ( the same token cann't be used for anything)
