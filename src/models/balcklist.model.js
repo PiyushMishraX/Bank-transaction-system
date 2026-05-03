@@ -22,3 +22,6 @@ module.exports = tokenBlackListModel;
 
 // the process is easy because everytime a token is created is is unique bcz of jwt.sign method which adds issuedAt time by default , so we do not have to check token for uniqueness ,
 // we check uniquness only for when one request is being used multiple times
+
+
+// we have to also check in everyprocess that the blacklisted process isn't being used , which can be done by adding a check in auth middleware functions
