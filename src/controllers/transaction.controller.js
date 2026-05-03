@@ -117,13 +117,21 @@ async function createTransaction(req, res){
     session.startTransaction()
 
     // create({}, {session})
-    const transaction = new transactionModel({
+    // const transaction = new transactionModel({
+    //     fromAccount,
+    //     toAccount,
+    //     amount,
+    //     idempotencyKey,
+    //     status: "PENDING"
+    // })
+    // if the same transaction runs twice in small interval and the transaction isn't sasved in db we get two transactions for same idempotecy key so we store it in db and update the status after completion
+    const transaction = (await transactionModel.create([ {
         fromAccount,
         toAccount,
         amount,
         idempotencyKey,
         status: "PENDING"
-    })
+    } ] ,{session}))[ 0 ] // at zero position of transaction array
 
     /**
      *  6. Create DEBIT ledger entry
@@ -153,9 +161,16 @@ async function createTransaction(req, res){
     /**
      * 8. Mark transaction COMPLETED
      */ 
-    transaction.status = "COMPLETED"
-    await transaction.save({ session })
-
+    // transaction.status = "COMPLETED"
+    // await transaction.save({ session })
+   
+    // using update method because transaction variable in constant so transaction.status can't be changed this way in db
+    await transactionModel.findOneAndUpdate(
+        { _id: transaction._id },
+        { status: "COMPLETED" },
+        { session }
+    )
+    transaction.status ="COMPLETED"// transaction is being used in response so we have to mark it completed so the response also have complete marked in it  
 
     /**
      * * 9. Commit MongoDB session
