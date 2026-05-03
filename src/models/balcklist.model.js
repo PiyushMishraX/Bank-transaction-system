@@ -25,3 +25,5 @@ module.exports = tokenBlackListModel;
 
 
 // we have to also check in everyprocess that the blacklisted process isn't being used , which can be done by adding a check in auth middleware functions
+
+// database won't be filled with garbage non-usable values , they will be deleted after their TTL-time to live ends( 3 days )
